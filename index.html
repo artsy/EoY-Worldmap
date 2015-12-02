@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <style>
+  /*set slider style*/
+  body {
+    font-size: 14px;
+    font-family: 'Garamond', sans-serif;
+  }
+
+  p {
+    color: black;
+    margin: 50px;
+  }
+
+  a {
+    color: black;
+  }
+
+  .axis {
+    fill: gray;
+  }
+
+  .axis .halo {
+    stroke: gray;
+    stroke-width: 4px;
+    stroke-linecap: round;
+  }
+
+  .slider .handle path {
+    stroke: black;
+    stroke-width: 5px;
+  
+    pointer-events: none;
+  }
+
+  .slider .handle text {
+    fill: black;
+    text-align: center;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
+  <script>
+
+drawWorld();
+
+
+function drawWorld() {
+var w = 1400;
+var h = 790;
+
+map_svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+
+projection = d3.geo.mercator()
+                    .scale(w/7)
+                    .translate([w/2, h/2]);
+
+var path = d3.geo.path()
+                  .projection(projection);
+
+d3.json("world.json", function(json) {
+  map_svg.selectAll("path")
+      .data(json.features)
+      .enter()
+      .append("path")
+      .attr("d", path);
+
+  drawSlider();
+
+})
+
+}
+
+
+function drawSlider() {
+
+formatDate = d3.time.format("%B %Y");
+
+// parameters
+var margin = {
+    top: 0,
+    right: 100,
+    bottom: 50,
+    left: 50
+  },
+  width = 960 - margin.left - margin.right,
+  height = 300 - margin.bottom - margin.top;
+
+
+// scale function
+timeScale = d3.time.scale()
+  .domain([new Date('2014-12'), new Date('2015-11')])
+  .range([0, width])
+  .clamp(true);
+
+// initial value
+var startValue = timeScale(new Date('2014-12'));
+startingValue = new Date('2014-12');
+
+// defines brush
+brush = d3.svg.brush()
+  .x(timeScale)
+  .extent([startingValue, startingValue])
+  .on("brush", brushed);
+
+var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  // classic transform to position g
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+  .attr("class", "x axis")
+// put in middle of screen
+.attr("transform", "translate(0," + height / 2 + ")")
+// introduce axis
+.call(d3.svg.axis()
+  .scale(timeScale)
+  .orient("bottom")
+  .tickFormat(function(d) {
+    return formatDate(d);
+  })
+  .tickSize(0)
+  .tickPadding(12)
+  .tickValues([timeScale.domain()[0], timeScale.domain()[1]]))
+  .select(".domain")
+  .select(function() {
+    return this.parentNode.appendChild(this.cloneNode(true));
+  })
+  .attr("class", "halo");
+
+var slider = svg.append("g")
+  .attr("class", "slider")
+  .call(brush);
+
+slider.selectAll(".extent,.resize")
+  .remove();
+
+slider.select(".background")
+  .attr("height", height);
+
+handle = slider.append("g")
+  .attr("class", "handle")
+
+handle.append("path")
+  .attr("transform", "translate(0," + height / 2 + ")")
+  .attr("d", "M 0 -20 V 20")
+
+handle.append('text')
+  .text(startingValue)
+  .attr("transform", "translate(" + (-18) + " ," + (height / 2 - 25) + ")");
+
+slider
+  .call(brush.event);
+
+}
+
+// slider event handler
+function brushed() {
+  var value = brush.extent()[0];
+
+  if (d3.event.sourceEvent) {
+    value = timeScale.invert(d3.mouse(this)[0]);
+    brush.extent([value, value]);
+  }
+
+  handle.attr("transform", "translate(" + timeScale(value) + ",0)");
+  handle.select('text').text(formatDate(value));
+  sliderPos = formatDate(value);
+    
+  if (sliderPos == "November 2014") {
+      file = "nov14.csv";
+      drawData(file);
+      } 
+
+  else if (sliderPos == "December 2014") {
+      file = "dec14.csv";
+      drawData(file);
+      }
+
+ else if (sliderPos == "January 2015") {
+      file = "jan.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "February 2015") {
+      file = "feb.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "March 2015") {
+      file = "mar.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "April 2015") {
+      file = "apr.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "May 2015") {
+      file = "may.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "June 2015") {
+      file = "jun.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "July 2015") {
+      file = "jul.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "August 2015") {
+      file = "aug.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "September 2015") {
+      file = "sep.csv";
+      drawData(file);
+      }
+  else if (sliderPos == "October 2015") {
+      file = "oct.csv";
+      drawData(file);
+      }
+
+
+    function drawData() {
+
+     d3.csv(file, function(data) {
+
+    map_svg.selectAll("circle").remove();
+
+    map_svg.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return projection([d.longitude, d.latitude])[0];
+          })
+      .attr("cy", function(d) {
+          return projection([d.longitude, d.latitude])[1];
+          })
+      .attr("r", function(d) {
+          return Math.sqrt(parseInt(d.count)+1)*2
+          })
+      .style("fill", "blueviolet")
+      .style("opacity", 0.75)
+      .append("svg:title")
+      .text(function(d) {
+          return d.name;
+          })
+      .attr("x", function(d) {
+          return projection([d.longitude -(-1.5), d.latitude])[0];
+          })
+      .attr("y", function(d) {
+          return projection([d.longitude, d.latitude])[1]; 
+          })
+      .style("fill", "purple")
+      .style("font-size", 12);    
+      
+  })
+
+  }
+
+}
+
+  </script>
+</body>

@@ -1,3 +1,3 @@
 # EoY-Worldmap
 
-For now, just run the html file of the month you'd like to view data for. Interactive transitions and less clunkiness coming soon!
+Just run index.html and you're good to go! Smoother transitions and data consolidation coming soon.
