@@ -4,95 +4,85 @@
   <style>
   /*set slider style*/
   body {
+    background-color: black;
     font-size: 14px;
-    font-family: 'Garamond', sans-serif;
+    font-family: 'Garamond';
   }
-
   p {
     color: black;
     margin: 50px;
   }
-
   a {
     color: black;
   }
-
   .axis {
     fill: gray;
   }
-
   .axis .halo {
     stroke: gray;
-    stroke-width: 4px;
+    stroke-width: 1px;
     stroke-linecap: round;
   }
-
   .slider .handle path {
-    stroke: black;
-    stroke-width: 5px;
-  
+    stroke: white;
+    stroke-width: 4px;
     pointer-events: none;
   }
-
   .slider .handle text {
-    fill: black;
+    color: white;
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
+    font-family: 'Garamond';
   }
+
 </style>
 </head>
 <body>
   <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
   <script>
-
+var sliderPos = 'November 2014';
 drawWorld();
-
 
 function drawWorld() {
 var w = 1400;
-var h = 790;
-
+var h = 800;
 map_svg = d3.select("body")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
-
-projection = d3.geo.mercator()
+            .attr("fill", "#666666");
+projection = d3.geo.kavrayskiy7()
                     .scale(w/7)
-                    .translate([w/2, h/2]);
-
+                    .translate([w/2, h/2])
+                    .precision(.1);
 var path = d3.geo.path()
                   .projection(projection);
-
 d3.json("world.json", function(json) {
   map_svg.selectAll("path")
       .data(json.features)
       .enter()
       .append("path")
-      .attr("d", path);
-
+      .attr("d", path)
+      .attr("stroke", "#000000")
+      .attr("stroke-width", 1);
   drawSlider();
-
+  drawData();
 })
-
 }
 
-
 function drawSlider() {
-
-formatDate = d3.time.format("%B %Y");
-
-// parameters
+  formatDate = d3.time.format("%B %Y");
+  // parameters
 var margin = {
     top: 0,
     right: 100,
-    bottom: 50,
-    left: 50
+    bottom: 0,
+    left: 300
   },
-  width = 960 - margin.left - margin.right,
-  height = 300 - margin.bottom - margin.top;
-
+  width = 1250 - margin.left - margin.right,
+  height = 100 - margin.bottom - margin.top;
 
 // scale function
 timeScale = d3.time.scale()
@@ -110,12 +100,12 @@ brush = d3.svg.brush()
   .extent([startingValue, startingValue])
   .on("brush", brushed);
 
-var svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
+var svg = d3.select("svg")//.append("svg")
+  //.attr("width", width + margin.left + margin.right)
+  //.attr("height", 300)//height + margin.top + margin.bottom)
   .append("g")
   // classic transform to position g
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", "translate(" + margin.left + "," + 600 + ")");
 
 svg.append("g")
   .attr("class", "x axis")
@@ -129,7 +119,7 @@ svg.append("g")
     return formatDate(d);
   })
   .tickSize(0)
-  .tickPadding(12)
+  .tickPadding(25)
   .tickValues([timeScale.domain()[0], timeScale.domain()[1]]))
   .select(".domain")
   .select(function() {
@@ -154,13 +144,36 @@ handle.append("path")
   .attr("transform", "translate(0," + height / 2 + ")")
   .attr("d", "M 0 -20 V 20")
 
-handle.append('text')
-  .text(startingValue)
-  .attr("transform", "translate(" + (-18) + " ," + (height / 2 - 25) + ")");
+handle.append("text")
+  .attr("transform", "translate(" + (-50) + " ," + (height / 2 - 25) + ")");
+
 
 slider
   .call(brush.event);
+ 
+var button = d3.select("g").append("rect")
+    .attr("height", 35)
+    .attr("width", 70)
+    .attr("transform", "translate(" + (400) + " ," + (100) + ")")
+    .attr("stroke", "white")
+    .attr("fill", "black");
 
+var buttonText = d3.select("rect").append("rect")
+    .attr("height", 30)
+    .attr("width", 60)
+    .attr("stroke", "white")
+    .text("PLAY")
+    .attr("font-size", 14)
+    .attr("font-family", "Garamond")
+    .attr("color", "white");
+
+button.on('click', function() {
+  slider
+    .transition()
+    .duration(10000)
+    .call(brush.extent([new Date('2015-11'), new Date('2015-11')]))
+    .call(brush.event);
+  });
 }
 
 // slider event handler
@@ -174,68 +187,48 @@ function brushed() {
 
   handle.attr("transform", "translate(" + timeScale(value) + ",0)");
   handle.select('text').text(formatDate(value));
+  oldSliderPos = sliderPos;
   sliderPos = formatDate(value);
-    
-  if (sliderPos == "November 2014") {
-      file = "nov14.csv";
-      drawData(file);
-      } 
 
-  else if (sliderPos == "December 2014") {
-      file = "dec14.csv";
-      drawData(file);
-      }
-
- else if (sliderPos == "January 2015") {
-      file = "jan.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "February 2015") {
-      file = "feb.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "March 2015") {
-      file = "mar.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "April 2015") {
-      file = "apr.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "May 2015") {
-      file = "may.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "June 2015") {
-      file = "jun.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "July 2015") {
-      file = "jul.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "August 2015") {
-      file = "aug.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "September 2015") {
-      file = "sep.csv";
-      drawData(file);
-      }
-  else if (sliderPos == "October 2015") {
-      file = "oct.csv";
-      drawData(file);
-      }
+  updateCityValues();
+}
 
 
-    function drawData() {
+var sliderPositionHash = {
+  "November 2014": "nov",
+  "December 2014": "dec",
+  "January 2015": "jan",
+  "February 2015": "feb",
+  "March 2015": "mar",
+  "April 2015": "apr",
+  "May 2015": "may",
+  "June 2015": "jun",
+  "July 2015": "jul",
+  "August 2015": "aug",
+  "September 2015": "sep",
+  "October 2015": "oct"
+};
 
-     d3.csv(file, function(data) {
+function updateCityValues() {
+  if (oldSliderPos != sliderPos) {
+    //console.log(cities);
+    map_svg.selectAll("circle").transition().attr("r", function(cities) {
+      if (cities[sliderPositionHash[sliderPos]] > 0) {
+        return Math.log(parseInt(cities[sliderPositionHash[sliderPos]]) + 1) * 7;
+      }
+      else {
+        return 0;
+      }
+      
+    });
+  }
+}
 
-    map_svg.selectAll("circle").remove();
-
+function drawData() {
+  var defaultStartMonth = 'nov';
+  d3.csv("master_data.csv", function(cities) {
     map_svg.selectAll("circle")
-      .data(data)
+      .data(cities)
       .enter()
       .append("circle")
       .attr("cx", function(d) {
@@ -245,27 +238,33 @@ function brushed() {
           return projection([d.longitude, d.latitude])[1];
           })
       .attr("r", function(d) {
-          return Math.sqrt(parseInt(d.count)+1)*2
+          if (d[defaultStartMonth] > 0) {
+            return Math.log(parseInt(d[defaultStartMonth]) + 1) * 7;
+          }
+          else {
+            return 0;
+          }
+          
           })
-      .style("fill", "blueviolet")
-      .style("opacity", 0.75)
-      .append("svg:title")
-      .text(function(d) {
-          return d.name;
-          })
-      .attr("x", function(d) {
-          return projection([d.longitude -(-1.5), d.latitude])[0];
-          })
-      .attr("y", function(d) {
-          return projection([d.longitude, d.latitude])[1]; 
-          })
-      .style("fill", "purple")
-      .style("font-size", 12);    
+      .style("fill", "white")
+      .style("opacity", 0.5)
+      /*.on("mouseover", cityMouseOver)
+      .on("mouseout", cityMouseOut);
+
+      function cityMouseOver() {
+        var textBlock = d3.select("g").append("rect")
+          .attr("height", 180)
+          .attr("width", 180)
+          .attr("fill", "black")
+          .attr("stroke", "white")
+          .attr("transform", "translate(" + (-50) + " ," + (-200) + ")");
+      };
+
+      function cityMouseOut() {
+        var textOut = d3.select("rect").remove(); //can't get this to work yet, and it messes up the slider
+      };*/
       
   })
-
-  }
-
 }
 
   </script>
