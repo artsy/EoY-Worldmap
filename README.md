@@ -7,7 +7,7 @@ Known issues/needed fixes: <br>
 2. Play animation is sluggish at first <br>
 3. Play animation should be pause-able <br>
 4. Mouse hover event needs to end when mouse out <br>
-5. Mouse hover event disables slider <br>
+5. Mouse hover event currently disables slider <br>
 5. Append text (updated by city) to rectangle that appears on mouse hover <br>
 6. Various styling issues: not all specs are exact yet <br>
 7. Heading as per Owen's design
