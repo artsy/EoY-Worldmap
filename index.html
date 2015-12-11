@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+L<!DOCTYPE html>
 <meta charset="utf-8">
 <head>
   <style>
   /*set slider style*/
   body {
     background-color: black;
-    font-size: 14px;
+    font-size: 17px;
     font-family: 'Garamond';
   }
   p {
@@ -29,7 +29,7 @@
     pointer-events: none;
   }
   .slider .handle text {
-    color: white;
+    //fill: white;
     text-align: center;
     font-size: 17px;
     font-family: 'Garamond';
@@ -74,7 +74,7 @@ d3.json("world.json", function(json) {
 
 function drawSlider() {
   formatDate = d3.time.format("%B %Y");
-  // parameters
+
 var margin = {
     top: 0,
     right: 100,
@@ -100,19 +100,15 @@ brush = d3.svg.brush()
   .extent([startingValue, startingValue])
   .on("brush", brushed);
 
-var svg = d3.select("svg")//.append("svg")
-  //.attr("width", width + margin.left + margin.right)
-  //.attr("height", 300)//height + margin.top + margin.bottom)
+var svg = d3.select("svg")
   .append("g")
-  // classic transform to position g
   .attr("transform", "translate(" + margin.left + "," + 600 + ")");
 
 svg.append("g")
   .attr("class", "x axis")
-// put in middle of screen
-.attr("transform", "translate(0," + height / 2 + ")")
-// introduce axis
-.call(d3.svg.axis()
+  .attr("transform", "translate(0," + height / 2 + ")")
+  // introduce axis
+  .call(d3.svg.axis()
   .scale(timeScale)
   .orient("bottom")
   .tickFormat(function(d) {
@@ -152,27 +148,20 @@ slider
   .call(brush.event);
  
 var button = d3.select("g").append("rect")
-    .attr("height", 35)
+    .attr("id", "button")
+    .attr("height", 30)
     .attr("width", 70)
     .attr("transform", "translate(" + (400) + " ," + (100) + ")")
     .attr("stroke", "white")
     .attr("fill", "black");
 
-var buttonText = d3.select("rect").append("rect")
-    .attr("height", 30)
-    .attr("width", 60)
-    .attr("stroke", "white")
-    .text("PLAY")
-    .attr("font-size", 14)
-    .attr("font-family", "Garamond")
-    .attr("color", "white");
-
 button.on('click', function() {
   slider
     .transition()
-    .duration(10000)
+    .duration(20000)
     .call(brush.extent([new Date('2015-11'), new Date('2015-11')]))
     .call(brush.event);
+  
   });
 }
 
@@ -212,15 +201,15 @@ var sliderPositionHash = {
 function updateCityValues() {
   if (oldSliderPos != sliderPos) {
     //console.log(cities);
-    map_svg.selectAll("circle").transition().attr("r", function(cities) {
-      if (cities[sliderPositionHash[sliderPos]] > 0) {
-        return Math.log(parseInt(cities[sliderPositionHash[sliderPos]]) + 1) * 7;
-      }
-      else {
-        return 0;
-      }
-      
-    });
+    map_svg.selectAll("circle").transition().duration(800)
+      .attr("r", function(cities) {
+        if (cities[sliderPositionHash[sliderPos]] > 0) {
+          return Math.log(parseInt(cities[sliderPositionHash[sliderPos]]) + 1) * 7;
+        }
+        else {
+          return 0;
+        }   
+      });
   }
 }
 
@@ -231,6 +220,9 @@ function drawData() {
       .data(cities)
       .enter()
       .append("circle")
+      .attr("id", function(d) {
+          return d.name;
+          })
       .attr("cx", function(d) {
           return projection([d.longitude, d.latitude])[0];
           })
@@ -248,24 +240,38 @@ function drawData() {
           })
       .style("fill", "white")
       .style("opacity", 0.5)
-      /*.on("mouseover", cityMouseOver)
-      .on("mouseout", cityMouseOut);
+      .on("mouseover", function(d) {
+          cityMouseOver(d);
+          })
+      .on("mouseout", cityMouseOut);   
+  })
+};
 
-      function cityMouseOver() {
-        var textBlock = d3.select("g").append("rect")
-          .attr("height", 180)
-          .attr("width", 180)
-          .attr("fill", "black")
-          .attr("stroke", "white")
-          .attr("transform", "translate(" + (-50) + " ," + (-200) + ")");
+function cityMouseOver(d) {
+        d3.select("g").append("text")
+          .attr("id", "cityName")
+          .attr("color", "white")
+          .attr("font-size", 15)
+          .attr("font-family", "Avant Garde")
+          .attr("text-align", "center")
+          .attr("transform", "translate(" + (-30) + " ," + (-175) + ")")
+          .text(function() {
+              return d.name;
+          })
+        d3.select("g").append("text")
+          .attr("id", "cityBody")
+          .attr("color", "white")
+          .attr("font-size", 17)
+          .attr("font-family", "Garamond")
+          .attr("text-align", "center")
+          .attr("transform", "translate(" + (-30) + " ," + (-150) + ")")
+          .text("Lorem Ipsum");
       };
 
-      function cityMouseOut() {
-        var textOut = d3.select("rect").remove(); //can't get this to work yet, and it messes up the slider
-      };*/
-      
-  })
-}
+function cityMouseOut() {
+        var textOut = d3.select("#cityName").remove()
+                      d3.select("#cityBody").remove();
+      };
 
   </script>
 </body>
