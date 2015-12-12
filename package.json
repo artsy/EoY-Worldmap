@@ -6,7 +6,7 @@
   "scripts": {
     "server": "node server.js",
     "upload": "bucket-assets --bucket eoy-worldmap --fingerprint false",
-    "open": "open http://eoy-worldmap.s3-website-us-east-1.amazonaws.com/",
+    "open": "open https://s3.amazonaws.com/eoy-worldmap/index.html",
     "deploy": "nf run npm run upload && npm run open"
   },
   "repository": {
