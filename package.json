@@ -1,0 +1,27 @@
+{
+  "name": "eoy-worldmap",
+  "version": "1.0.0",
+  "description": "Run index.html. Hovers now working!",
+  "main": "index.js",
+  "scripts": {
+    "server": "node server.js",
+    "upload": "bucket-assets --bucket eoy-worldmap --fingerprint false",
+    "open": "open http://eoy-worldmap.s3-website-us-east-1.amazonaws.com/",
+    "deploy": "nf run npm run upload && npm run open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigspaeth/EoY-Worldmap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/craigspaeth/EoY-Worldmap/issues"
+  },
+  "homepage": "https://github.com/craigspaeth/EoY-Worldmap#readme",
+  "dependencies": {
+    "bucket-assets": "^0.2.12",
+    "express": "^4.13.3",
+    "foreman": "^1.4.1"
+  }
+}
