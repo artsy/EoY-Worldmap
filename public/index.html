@@ -1,53 +1,45 @@
-L<!DOCTYPE html>
+<!DOCTYPE html>
 <meta charset="utf-8">
 <head>
   <style>
-  /*set slider style*/
+
   body {
     background-color: black;
-    font-size: 17px;
-    font-family: 'Garamond';
-  }
-  p {
-    color: black;
-    margin: 50px;
-  }
-  a {
-    color: black;
-  }
-  .axis {
-    fill: gray;
   }
   .axis .halo {
-    stroke: gray;
+    stroke: white;
     stroke-width: 1px;
     stroke-linecap: round;
+    fill: none;
   }
   .slider .handle path {
     stroke: white;
     stroke-width: 4px;
-    pointer-events: none;
   }
   .slider .handle text {
-    //fill: white;
+    fill: gray;
     text-align: center;
     font-size: 17px;
     font-family: 'Garamond';
+  }
+  .tick line {
+    stroke: white;
+    stroke-width: 1px;
   }
 
 </style>
 </head>
 <body>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-geo-projection/0.2.15/d3.geo.projection.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
   <script>
-var sliderPos = 'November 2014';
+var sliderPos = 'January 2015';
 drawWorld();
 
 function drawWorld() {
-var w = 1400;
-var h = 800;
+var w = 1250;
+var h = 1050;
 map_svg = d3.select("body")
             .append("svg")
             .attr("width", w)
@@ -69,7 +61,212 @@ d3.json("world.json", function(json) {
       .attr("stroke-width", 1);
   drawSlider();
   drawData();
+  drawStories();
+  drawArrows();
 })
+
+}
+
+function drawArrows() {
+  map_svg.append("path")
+    .attr("id", "rightArrow")
+    .attr("d", "M 1075 280 L 1100 270 L 1075 260")
+    .style("stroke", "white")
+    .style("stroke-width", 4)
+    .style("fill", "none")
+    .on("click", stepRight);
+  map_svg.append("path")
+    .attr("id", "leftArrow")
+    .attr("d", "M 250 280 L 225 270 L 250 260")
+    .style("stroke", "white")
+    .style("stroke-width", 4)
+    .style("fill", "none")
+    .on("click", stepLeft);
+}
+
+//prototype of vanishing arrows
+/*function drawArrows() {
+  map_svg.append("rect").style("opacity", 0)
+    .attr("width", 625)
+    .attr("height", 1050)
+    .attr("transform", "translate(" + 625 + " ," + 0 + ")")
+    .on("mouseover", arrowOverRight)
+    .on("mouseout", arrowOutRight);
+  map_svg.append("rect").style("opacity", 0)
+    .attr("width", 625)
+    .attr("height", 1050)
+    .attr("transform", "translate(" + 0 + " ," + 0 + ")")
+    .on("mouseover", arrowOverLeft)
+    .on("mouseout", arrowOutLeft);
+}
+
+function arrowOverRight() {
+  map_svg.append("path")
+    .attr("id", "rightArrow")
+    .attr("d", "M 1075 280 L 1100 270 L 1075 260")
+    .style("stroke", "white")
+    .style("stroke-width", 2)
+    .style("fill", "none")
+    .on("click", stepRight);
+}
+
+function arrowOutRight() {
+  map_svg.select("#rightArrow").remove();
+}
+
+function arrowOverLeft() {
+  map_svg.append("path")
+    .attr("id", "leftArrow")
+    .attr("d", "M 250 280 L 225 270 L 250 260")
+    .style("stroke", "white")
+    .style("stroke-width", 2)
+    .style("fill", "none")
+    //.on("click", stepLeft);
+}
+
+function arrowOutLeft() {
+  map_svg.select("#leftArrow").remove();
+}*/
+
+function drawStories() {
+  var storyData = d3.csv("story.csv", function(stories) {
+    map_svg.selectAll("ellipse")
+    .data(stories)
+    .enter()
+    .append("ellipse")
+    .attr("cx", function(stories) {return stories.xPos})
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white")
+    .on("mouseover", show);
+
+  });
+}
+/*
+  singapore = map_svg.append("ellipse")
+    .attr("cx", 300)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white")
+    .on("mouseover", show);
+  map_svg.selectAll("ellipse")
+    .data(storyData)
+    .enter()
+    .append("ellipse")
+    .attr("cx", storyData.)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white")
+    .on("mouseover", show()); //pass id
+  losAngeles = map_svg.append("ellipse")
+    .attr("cx", 375)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  newYork = map_svg.append("ellipse")
+    .attr("cx", 450)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  hongKong = map_svg.append("ellipse")
+    .attr("cx", 487.5)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  saoPaulo = map_svg.append("ellipse")
+    .attr("cx", 525)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  brussels = map_svg.append("ellipse")
+    .attr("cx", 562.5)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  venice = map_svg.append("ellipse")
+    .attr("cx", 600)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  baselZurich = map_svg.append("ellipse")
+    .attr("cx", 675)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  beijing = map_svg.append("ellipse")
+    .attr("cx", 750)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  detroit = map_svg.append("ellipse")
+    .attr("cx", 825)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  berlin = map_svg.append("ellipse")
+    .attr("cx", 900)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  istanbul = map_svg.append("ellipse")
+    .attr("cx", 937.5)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  london = map_svg.append("ellipse")
+    .attr("cx", 975)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  paris = map_svg.append("ellipse")
+    .attr("cx", 1012.5)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+  miami = map_svg.append("ellipse")
+    .attr("cx", 1100)
+    .attr("cy", 710)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("fill", "white");
+}*/
+
+function show(stories) {
+  d3.selectAll("circle")
+    .style("fill", "white")
+    .style("opacity", 0.5);
+  d3.select("#"+stories.name)
+    .style("fill", "none")
+    .style("stroke", "white")
+    .style("stroke-width", 4)
+    .style("opacity", 1);
+  cityBody = d3.select("g").append("text")
+    .attr("id", "cityBody")
+    .attr("fill", "white")
+    .attr("font-size", 17)
+    .attr("font-family", "Garamond")
+    .attr("text-align", "center")
+    .attr("transform", "translate(" + (-30) + " ," + (-150) + ")")
+    .text(function(stories) {
+      return "Lorem Ipsum"; //replace with stories.story
+    });
+
 }
 
 function drawSlider() {
@@ -77,32 +274,33 @@ function drawSlider() {
 
 var margin = {
     top: 0,
-    right: 100,
+    right: 300,
     bottom: 0,
     left: 300
   },
-  width = 1250 - margin.left - margin.right,
-  height = 100 - margin.bottom - margin.top;
+  width = 1450 - margin.left - margin.right,
+  height = 300 - margin.bottom - margin.top;
 
+domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04'), new Date('2015-05'), new Date('2015-06'), new Date('2015-07'), new Date('2015-08'), new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12'), new Date('2016-01')];
 // scale function
 timeScale = d3.time.scale()
-  .domain([new Date('2014-12'), new Date('2015-11')])
+  .domain([domainArray[0], domainArray[11]])
   .range([0, width])
   .clamp(true);
 
 // initial value
-var startValue = timeScale(new Date('2014-12'));
-startingValue = new Date('2014-12');
+startingValue = new Date('2015-02');
 
 // defines brush
 brush = d3.svg.brush()
   .x(timeScale)
   .extent([startingValue, startingValue])
   .on("brush", brushed);
+  //.on("brushend", brushended);
 
 var svg = d3.select("svg")
   .append("g")
-  .attr("transform", "translate(" + margin.left + "," + 600 + ")");
+  .attr("transform", "translate(" + 250 + "," + 600 + ")");
 
 svg.append("g")
   .attr("class", "x axis")
@@ -111,19 +309,16 @@ svg.append("g")
   .call(d3.svg.axis()
   .scale(timeScale)
   .orient("bottom")
+  .ticks(12)
+  .tickSize(15)
   .tickFormat(function(d) {
-    return formatDate(d);
-  })
-  .tickSize(0)
-  .tickPadding(25)
-  .tickValues([timeScale.domain()[0], timeScale.domain()[1]]))
+    //return formatDate(d);
+  }))
   .select(".domain")
-  .select(function() {
-    return this.parentNode.appendChild(this.cloneNode(true));
-  })
   .attr("class", "halo");
 
-var slider = svg.append("g")
+
+slider = svg.append("g")
   .attr("class", "slider")
   .call(brush);
 
@@ -141,28 +336,48 @@ handle.append("path")
   .attr("d", "M 0 -20 V 20")
 
 handle.append("text")
-  .attr("transform", "translate(" + (-50) + " ," + (height / 2 - 25) + ")");
-
+  .attr("transform", "translate(" + (-45) + " ," + (height / 2 + 40) + ")")
 
 slider
   .call(brush.event);
+}
 
-var button = d3.select("g").append("rect")
-    .attr("id", "button")
-    .attr("height", 30)
-    .attr("width", 70)
-    .attr("transform", "translate(" + (400) + " ," + (100) + ")")
-    .attr("stroke", "white")
-    .attr("fill", "black");
+var domainArrayHash = {
+  "January 2015": 0,
+  "February 2015": 1,
+  "March 2015": 2,
+  "April 2015": 3,
+  "May 2015": 4,
+  "June 2015": 5,
+  "July 2015": 6,
+  "August 2015": 7,
+  "September 2015": 8,
+  "October 2015": 9,
+  "November 2015": 10,
+  "December 2015": 11
+};
 
-button.on('click', function() {
-  slider
-    .transition()
-    .duration(20000)
-    .call(brush.extent([new Date('2015-11'), new Date('2015-11')]))
+//brush snapping - doesn't work yet
+/*function brushended() {
+  if (!d3.event.sourceEvent) return;
+  var extent0 = brush.extent(),
+      extent1 = extent0.map(d3.time.month.round);
+
+  if (extent1[0] >= extent1[1]) {
+      extent1[0] = d3.time.month.floor(extent0[0]);
+      extent1[1] = d3.time.month.ceil(extent0[1]);
+  }
+
+  d3.select(this).transition()
+    .call(brush.extent(extent1))
     .call(brush.event);
+}*/
 
-  });
+function iterArr(domainArray) {
+  var current = domainArrayHash[sliderPos];
+  domainArray.next = (function() { return (++current >= this.length) ? false : this[current];});
+  domainArray.prev = (function() { return (--current < 0) ? false : this[current];});
+  
 }
 
 // slider event handler
@@ -171,7 +386,8 @@ function brushed() {
 
   if (d3.event.sourceEvent) {
     value = timeScale.invert(d3.mouse(this)[0]);
-    brush.extent([value, value]);
+    brush.extent([formatDate(value), formatDate(value)]);
+    
   }
 
   handle.attr("transform", "translate(" + timeScale(value) + ",0)");
@@ -180,12 +396,37 @@ function brushed() {
   sliderPos = formatDate(value);
 
   updateCityValues();
+  iterArr(domainArray);
+}
+
+//button event handler
+function stepRight() {
+   var duration = 1000;
+   var step = domainArray.next();  
+
+   slider
+      .transition()
+      .duration(duration)
+      .ease('linear')
+      .call(brush.extent([step, step]))
+      .call(brush.event);
+    return domainArrayHash[sliderPos];
+}
+
+function stepLeft() {
+  var duration = 1000;
+  var step = domainArray.prev();
+
+  slider
+    .transition()
+    .duration(duration)
+    .ease('linear')
+    .call(brush.extent([step, step]))
+    .call(brush.event);
 }
 
 
 var sliderPositionHash = {
-  "November 2014": "nov",
-  "December 2014": "dec",
   "January 2015": "jan",
   "February 2015": "feb",
   "March 2015": "mar",
@@ -195,26 +436,31 @@ var sliderPositionHash = {
   "July 2015": "jul",
   "August 2015": "aug",
   "September 2015": "sep",
-  "October 2015": "oct"
+  "October 2015": "oct",
+  "November 2015": "nov",
+  "December 2015": "dec"
 };
 
 function updateCityValues() {
   if (oldSliderPos != sliderPos) {
-    //console.log(cities);
-    map_svg.selectAll("circle").transition().duration(800)
+    //add: display default month by making hash for sliderPos:default city, then pass to show function
+    map_svg.select("#cityBody").remove();
+    map_svg.selectAll("circle").transition().duration(500)
+      .style("fill", "white")
+      .style("opacity", 0.5)
       .attr("r", function(cities) {
         if (cities[sliderPositionHash[sliderPos]] > 0) {
           return Math.log(parseInt(cities[sliderPositionHash[sliderPos]]) + 1) * 7;
         }
         else {
           return 0;
-        }
+        }   
       });
   }
 }
 
 function drawData() {
-  var defaultStartMonth = 'nov';
+  var defaultStartMonth = 'jan';
   d3.csv("master_data.csv", function(cities) {
     map_svg.selectAll("circle")
       .data(cities)
@@ -236,41 +482,38 @@ function drawData() {
           else {
             return 0;
           }
-
+          
           })
       .style("fill", "white")
       .style("opacity", 0.5)
       .on("mouseover", function(d) {
           cityMouseOver(d);
           })
-      .on("mouseout", cityMouseOut);
+      .on("mouseout", cityMouseOut)
   })
+
 };
 
 function cityMouseOver(d) {
-        d3.select("g").append("text")
-          .attr("id", "cityName")
-          .attr("color", "white")
-          .attr("font-size", 15)
-          .attr("font-family", "Avant Garde")
+        cityLabel = d3.select("g").append("text")
+          .attr("id", "cityLabel")
+          .style("fill", "white")
+          .style("font-size", 15)
+          .style("font-family", "Garamond")
           .attr("text-align", "center")
-          .attr("transform", "translate(" + (-30) + " ," + (-175) + ")")
           .text(function() {
               return d.name;
           })
-        d3.select("g").append("text")
-          .attr("id", "cityBody")
-          .attr("color", "white")
-          .attr("font-size", 17)
-          .attr("font-family", "Garamond")
-          .attr("text-align", "center")
-          .attr("transform", "translate(" + (-30) + " ," + (-150) + ")")
-          .text("Lorem Ipsum");
+          .attr("x", function() { //this doesn't work yet
+            return d.longitude -(-1.5);
+          })
+          .attr("y", function() {
+            return d.latitude; 
+          });
       };
 
 function cityMouseOut() {
-        var textOut = d3.select("#cityName").remove()
-                      d3.select("#cityBody").remove();
+        var textOut = d3.select("#cityLabel").remove()
       };
 
   </script>
