@@ -24,7 +24,7 @@ drawWorld();
 function drawWorld() {
   var w = 1100;
   var h = 800;
-  map_svg = d3.select(".map")
+  map_svg = d3.select(".map-svg")
     .append("svg")
     .attr("width", w)
     .attr("height", h)
@@ -67,6 +67,8 @@ function toggleArrows() {
       d3.select('body').attr('class', 'right-arrow').on('click', stepLeft);
     }
   });
+  d3.select('.mobile-arrows-left').on('click', stepLeft);
+  d3.select('.mobile-arrows-right').on('click', stepRight);
 }
 
 function drawSlider() {
@@ -102,7 +104,7 @@ function drawSlider() {
     .attr("transform", "translate(" + 0 + "," + 570 + ")");
 
   svg.append("g")
-    .attr("class", "x axis")
+    .attr("class", "axis")
     .attr("transform", "translate(0," + height / 2 + ")")
     // introduce axis
     .call(d3.svg.axis()
