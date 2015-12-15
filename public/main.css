@@ -16,11 +16,11 @@ body {
 }
 
 body.right-arrow {
-  cursor: url("chevron-left.png"), auto;
+  cursor: url("chevron-left.png") -24 20, auto;
 }
 
 body.left-arrow {
-  cursor: url("chevron-right.png"), auto;
+  cursor: url("chevron-right.png") 24 20, auto;
 }
 
 .axis .halo {
@@ -169,6 +169,9 @@ body.left-arrow {
 @media only screen and (max-width: 1150px) {
   .map svg {
     transform: scaleX(0.9) scaleY(0.9);
+  }
+  .map-story, .map-story2 {
+    bottom: 200px;
   }
 }
 

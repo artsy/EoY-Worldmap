@@ -280,7 +280,12 @@ function cityMouseOver(d, circle) {
   var cityLabel = map_svg.append("text")
     .attr("class", "city-label")
     .text(function() {
-      return d.name;
+      return d.name
+        .replace('Sao Paulo', 'São Paulo')
+        .replace('Dusseldorf', 'Düsseldorf')
+        .replace('Malmo', 'Malmö')
+        .replace('Zurich', 'Zürich')
+        .replace('Koln', 'Köln');
     })
     .attr("x", function() {
       return Number(d3.select(circle).attr('cx'));
