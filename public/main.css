@@ -106,12 +106,11 @@ body.left-arrow {
   text-transform: uppercase;
 }
 
-.map-story {
-  width: 280px;
-  height: 250px;
+.map-story, .map-story2 {
+  width: calc(50% - 70px);
+  height: 150px;
   position: absolute;
-  left: 50px;
-  bottom: 200px;
+  bottom: 140px;
   color: white;
   text-align: left;
   line-height: 1.6em;
@@ -119,7 +118,17 @@ body.left-arrow {
   z-index: 10;
 }
 
-.map-story h2 {
+.map-story {
+  left: 50px;
+  padding-right: 15px;
+}
+
+.map-story2 {
+  padding-left: 15px;
+  right: 50px;
+}
+
+.map-story h2, .map-story2 h2 {
   font-family: 'AvantGarde';
   text-transform: uppercase;
   font-size: 15px;
@@ -167,7 +176,7 @@ body.left-arrow {
   .map svg {
     transform: scaleX(0.8) scaleY(0.8);
   }
-  .map-story {
+  .map-story, .map-story2 {
     bottom: 290px;
   }
 }
@@ -176,7 +185,7 @@ body.left-arrow {
   .map svg {
     transform: scaleX(0.7) scaleY(0.7);
   }
-  .map-story {
+  .map-story, .map-story2 {
     bottom: 350px;
   }
 }
@@ -188,7 +197,7 @@ body.left-arrow {
   .map-svg {
     height: 550px;
   }
-  .map-story {
+  .map-story, .map-story2 {
     position: relative;
     top: 0;
     left: 0;
@@ -197,7 +206,7 @@ body.left-arrow {
   .slider, .axis {
     display: none;
   }
-  .map, .copy-header, .map-story {
+  .map, .copy-header, .map-story, .map-story2 {
     width: 100%;
   }
   .map, .copy-header {
@@ -242,6 +251,10 @@ body.left-arrow {
 
   body.left-arrow {
     cursor: auto;
+  }
+  .map-story2 {
+    padding: 0;
+    margin-top: 55px;
   }
 }
 

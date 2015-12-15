@@ -155,6 +155,11 @@ function highlightCurrentCity(stories) {
     .style("stroke", "white")
     .style("stroke-width", 4)
     .style("opacity", 1);
+  d3.select("[id='" + story.labeltwo + "']")
+    .style("fill", "none")
+    .style("stroke", "white")
+    .style("stroke-width", 4)
+    .style("opacity", 1);
 }
 
 // slider event handler
@@ -180,6 +185,8 @@ function renderStory() {
   var story = STORIES[sliderPos];
   d3.select('.map-story h2').text(story.label);
   d3.select('.map-story p').text(story.copy);
+  d3.select('.map-story2 h2').text(story.labeltwo);
+  d3.select('.map-story2 p').text(story.copytwo);
 }
 
 function updateCityValues() {
