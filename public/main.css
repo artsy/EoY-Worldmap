@@ -236,6 +236,13 @@ body.left-arrow {
   .mobile-arrows {
     display: block;
   }
+  body.right-arrow {
+    cursor: auto;
+  }
+
+  body.left-arrow {
+    cursor: auto;
+  }
 }
 
 @media only screen and (max-width: 700px) {
@@ -243,7 +250,6 @@ body.left-arrow {
     transform: scaleX(0.55) scaleY(0.55);
   }
 }
-
 
 @media only screen and (max-width: 600px) {
   .map svg {
@@ -255,7 +261,7 @@ body.left-arrow {
   .map svg {
     transform: scaleX(0.35) scaleY(0.35);
     position: relative;
-    left: -85px;
+    left: -75px;
   }
   .map-svg {
     height: 250px;
