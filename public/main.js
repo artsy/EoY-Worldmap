@@ -1,17 +1,37 @@
 var sliderPos = 'January 2015';
+var sliderPositions = [
+  "January 2015",
+  "February 2015",
+  "March 2015",
+  "April 2015",
+  "May 2015",
+  "June 2015",
+  "July 2015",
+  "August 2015",
+  "September 2015",
+  "October 2015",
+  "November 2015",
+  "December 2015"
+];
+var domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04'),
+  new Date('2015-05'), new Date('2015-06'), new Date('2015-07'), new Date('2015-08'),
+  new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12'),
+  new Date('2016-01')];
+var SLIDER_DURATION = 400;
+
 drawWorld();
 
 function drawWorld() {
   var w = 1100;
-  var h = 1050;
+  var h = 800;
   map_svg = d3.select(".map")
     .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("fill", "#666666");
   projection = d3.geo.kavrayskiy7()
-    .scale(240)
-    .translate([530, 380])
+    .scale(220)
+    .translate([580, 380])
     .precision(.1);
   var path = d3.geo.path()
     .projection(projection);
@@ -27,6 +47,8 @@ function drawWorld() {
     drawData();
     arrowClickHandlers();
     toggleArrows();
+    renderStory();
+    setTimeout(highlightCurrentCity, 100);
   })
 }
 
@@ -48,28 +70,6 @@ function toggleArrows() {
   });
 }
 
-function show(stories) {
-  d3.selectAll("circle")
-    .style("fill", "white")
-    .style("opacity", 0.5);
-  d3.select("#" + stories.name)
-    .style("fill", "none")
-    .style("stroke", "white")
-    .style("stroke-width", 4)
-    .style("opacity", 1);
-  cityBody = d3.select("g").append("text")
-    .attr("id", "cityBody")
-    .attr("fill", "white")
-    .attr("font-size", 17)
-    .attr("font-family", "Garamond")
-    .attr("text-align", "center")
-    .attr("transform", "translate(" + (-30) + " ," + (-150) + ")")
-    .text(function(stories) {
-      return "Lorem Ipsum"; //replace with stories.story
-    });
-
-}
-
 function drawSlider() {
   formatDate = d3.time.format("%B %Y");
 
@@ -82,7 +82,6 @@ function drawSlider() {
     width = 1100,
     height = 300 - margin.bottom - margin.top;
 
-  domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04'), new Date('2015-05'), new Date('2015-06'), new Date('2015-07'), new Date('2015-08'), new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12'), new Date('2016-01')];
   // scale function
   timeScale = d3.time.scale()
     .domain([domainArray[0], domainArray[11]])
@@ -96,8 +95,8 @@ function drawSlider() {
   brush = d3.svg.brush()
     .x(timeScale)
     .extent([startingValue, startingValue])
-    .on("brush", brushed);
-  //.on("brushend", brushended);
+    .on("brush", brushed)
+    .on("brushend", highlightCurrentCity);
 
   var svg = d3.select("svg")
     .append("g")
@@ -145,30 +144,16 @@ function drawSlider() {
     .call(brush.event);
 }
 
-var domainArrayHash = {
-  "January 2015": 0,
-  "February 2015": 1,
-  "March 2015": 2,
-  "April 2015": 3,
-  "May 2015": 4,
-  "June 2015": 5,
-  "July 2015": 6,
-  "August 2015": 7,
-  "September 2015": 8,
-  "October 2015": 9,
-  "November 2015": 10,
-  "December 2015": 11
-};
-
-function iterArr(domainArray) {
-  var current = domainArrayHash[sliderPos];
-  domainArray.next = (function() {
-    return (++current >= this.length) ? false : this[current];
-  });
-  domainArray.prev = (function() {
-    return (--current < 0) ? false : this[current];
-  });
-
+function highlightCurrentCity(stories) {
+  var story = STORIES[sliderPos];
+  d3.selectAll("circle")
+    .style("fill", "white")
+    .style("opacity", 0.5);
+  d3.select("[id='" + story.label + "']")
+    .style("fill", "none")
+    .style("stroke", "white")
+    .style("stroke-width", 4)
+    .style("opacity", 1);
 }
 
 // slider event handler
@@ -186,59 +171,36 @@ function brushed() {
   oldSliderPos = sliderPos;
   sliderPos = formatDate(value);
 
+  // Run "on date change" callbacks
+  renderStory();
   updateCityValues();
-  iterArr(domainArray);
 }
 
-//button event handler
-function stepRight() {
-  var duration = 1000;
-  var step = domainArray.next();
-
-  slider
-    .transition()
-    .duration(duration)
-    .ease('linear')
-    .call(brush.extent([step, step]))
-    .call(brush.event);
-  return domainArrayHash[sliderPos];
+function renderStory() {
+  var story = STORIES[sliderPos];
+  d3.select('.map-story h2').text(story.label);
+  d3.select('.map-story p').text(story.copy);
 }
-
-function stepLeft() {
-  var duration = 1000;
-  var step = domainArray.prev();
-
-  slider
-    .transition()
-    .duration(duration)
-    .ease('linear')
-    .call(brush.extent([step, step]))
-    .call(brush.event);
-}
-
-
-var sliderPositionHash = {
-  "January 2015": "jan",
-  "February 2015": "feb",
-  "March 2015": "mar",
-  "April 2015": "apr",
-  "May 2015": "may",
-  "June 2015": "jun",
-  "July 2015": "jul",
-  "August 2015": "aug",
-  "September 2015": "sep",
-  "October 2015": "oct",
-  "November 2015": "nov",
-  "December 2015": "dec"
-};
 
 function updateCityValues() {
+  var sliderPositionHash = {
+    "January 2015": "jan",
+    "February 2015": "feb",
+    "March 2015": "mar",
+    "April 2015": "apr",
+    "May 2015": "may",
+    "June 2015": "jun",
+    "July 2015": "jul",
+    "August 2015": "aug",
+    "September 2015": "sep",
+    "October 2015": "oct",
+    "November 2015": "nov",
+    "December 2015": "dec"
+  };
   if (oldSliderPos != sliderPos) {
     //add: display default month by making hash for sliderPos:default city, then pass to show function
     map_svg.select("#cityBody").remove();
     map_svg.selectAll("circle").transition().duration(500)
-      .style("fill", "white")
-      .style("opacity", 0.5)
       .attr("r", function(cities) {
         if (cities[sliderPositionHash[sliderPos]] > 0) {
           return Math.log(parseInt(cities[sliderPositionHash[sliderPos]]) + 1) * 7;
@@ -247,6 +209,28 @@ function updateCityValues() {
         }
       });
   }
+}
+
+//button event handler
+function stepRight() {
+  var nextDate = domainArray[sliderPositions.indexOf(sliderPos) + 1];
+  slider
+    .transition()
+    .duration(SLIDER_DURATION)
+    .ease('linear')
+    .call(brush.extent([nextDate, nextDate]))
+    .call(brush.event);
+}
+
+function stepLeft() {
+  var currentDate = domainArray[sliderPositions.indexOf(sliderPos)];
+  var prevDate = domainArray[sliderPositions.indexOf(sliderPos) - 1];
+  slider
+    .transition()
+    .duration(SLIDER_DURATION)
+    .ease('linear')
+    .call(brush.extent([prevDate, currentDate]))
+    .call(brush.event);
 }
 
 function drawData() {
