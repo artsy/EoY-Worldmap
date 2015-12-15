@@ -45,27 +45,26 @@ function drawWorld() {
       .attr("stroke-width", 1);
     drawSlider();
     drawData();
-    arrowClickHandlers();
     toggleArrows();
     renderStory();
     setTimeout(highlightCurrentCity, 100);
   })
 }
 
-function arrowClickHandlers() {
-  d3.select(".left-arrow").on("click", stepLeft);
-  d3.select(".right-arrow").on("click", stepRight);
-}
-
 function toggleArrows() {
   d3.select('body').on("mousemove", function(e) {
     var mouseX = d3.mouse(this)[0];
-    if (mouseX > window.innerWidth / 2) {
-      d3.select('.left-arrow').style('opacity', 0);
-      d3.select('.right-arrow').style('opacity', 1);
+    var mouseY = d3.mouse(this)[1];
+    // This is pathetic... D3 doesn't support any form of `offset`
+    var mapTop = $('.map').offset().top;
+    var mapBottom = $('.map').offset().top + $('.map').height();
+    if (mouseY < mapTop || mouseY > (mapBottom - 200)) {
+      d3.select('body').attr('class', '')
+        .on('click', null); // Seriously no `off` WTF d3?
+    } else if (mouseX > window.innerWidth / 2) {
+      d3.select('body').attr('class', 'left-arrow').on('click', stepRight);
     } else {
-      d3.select('.left-arrow').style('opacity', 1);
-      d3.select('.right-arrow').style('opacity', 0);
+      d3.select('body').attr('class', 'right-arrow').on('click', stepLeft);
     }
   });
 }
@@ -138,7 +137,7 @@ function drawSlider() {
   handle
     .append("text")
     .attr('class', 'slider-label')
-    .attr("transform", "translate(" + (-45) + " ," + (height / 2 + 50) + ")")
+    .attr("transform", "translate(0," + (height / 2 + 50) + ")")
 
   slider
     .call(brush.event);
@@ -163,11 +162,10 @@ function brushed() {
   if (d3.event.sourceEvent) {
     value = timeScale.invert(d3.mouse(this)[0]);
     brush.extent([formatDate(value), formatDate(value)]);
-
   }
 
   handle.attr("transform", "translate(" + timeScale(value) + ",0)");
-  handle.select('text').text(formatDate(value));
+  handle.select('text').text(formatDate(value).replace('2015', ''));
   oldSliderPos = sliderPos;
   sliderPos = formatDate(value);
 
@@ -214,6 +212,7 @@ function updateCityValues() {
 //button event handler
 function stepRight() {
   var nextDate = domainArray[sliderPositions.indexOf(sliderPos) + 1];
+  if (!nextDate) return;
   slider
     .transition()
     .duration(SLIDER_DURATION)
@@ -225,6 +224,7 @@ function stepRight() {
 function stepLeft() {
   var currentDate = domainArray[sliderPositions.indexOf(sliderPos)];
   var prevDate = domainArray[sliderPositions.indexOf(sliderPos) - 1];
+  if (!prevDate) return;
   slider
     .transition()
     .duration(SLIDER_DURATION)
@@ -268,17 +268,20 @@ function drawData() {
 };
 
 function cityMouseOver(d, circle) {
-  cityLabel = map_svg.append("text")
+  var cityLabel = map_svg.append("text")
     .attr("class", "city-label")
     .text(function() {
       return d.name;
     })
-    .attr("x", function() { //this doesn't work yet
-      return Number(d3.select(circle).attr('cx')) + 30;
+    .attr("x", function() {
+      return Number(d3.select(circle).attr('cx'));
     })
     .attr("y", function() {
-      return Number(d3.select(circle).attr('cy')) + 5;
+      return Number(d3.select(circle).attr('cy')) - 30;
     });
+  var width = cityLabel.node().getBBox().width;
+  var curX = cityLabel.attr('x');
+  cityLabel.attr('x', (curX - width / 2) + 5);
 };
 
 function cityMouseOut() {

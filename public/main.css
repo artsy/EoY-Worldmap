@@ -15,6 +15,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body.right-arrow {
+  cursor: url("chevron-left.png"), auto;
+}
+
+body.left-arrow {
+  cursor: url("chevron-right.png"), auto;
+}
+
 .axis .halo {
   stroke: white;
   stroke-width: 1px;
@@ -31,6 +39,7 @@ body {
   fill: white;
   text-align: center;
   font-size: 17px;
+  text-anchor: middle;
 }
 
 .tick line {
@@ -55,31 +64,6 @@ body {
 
 .map svg {
   padding: 0 50px;
-}
-
-.left-arrow, .right-arrow {
-  width: 22px;
-  height: 40px;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center center;
-  border: 0;
-  position: absolute;
-  top: 20px;
-  outline: none;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.left-arrow {
-  background-image: url(chevron-left.svg);
-  left: 50px;
-}
-
-.right-arrow {
-  background-image: url(chevron-right.svg);
-  right: 50px;
 }
 
 .copy-header {
@@ -116,7 +100,9 @@ body {
 
 .city-label {
   fill: white;
-  font-size: 17px;
+  font-size: 15px;
+  font-family: 'AvantGarde';
+  text-transform: uppercase;
 }
 
 .map-story {
@@ -139,5 +125,6 @@ body {
 
 @media only screen and (max-width: 500px) {
   body {
+    background: red;
   }
 }
