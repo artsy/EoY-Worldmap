@@ -4,6 +4,12 @@
 }
 
 @font-face {
+  font-family: "Garamond";
+  src: url("garamonditalics.otf");
+  font-style: italic;
+}
+
+@font-face {
   font-family: "AvantGarde";
   src: url("avantgarde.ttf");
 }
@@ -21,6 +27,26 @@ body.right-arrow {
 
 body.left-arrow {
   cursor: url("chevron-right.png") 24 20, auto;
+}
+
+a {
+  display: inline-block;
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  height: 1em;
+  width: 100%;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+i {
+  font-style: italic;
 }
 
 .axis .halo {
@@ -86,6 +112,11 @@ body.left-arrow {
   text-align: left;
 }
 
+.map-story a, .map-story2 a {
+  color: white;
+  text-decoration: none;
+}
+
 .copy-header-read-more {
   color: white;
   text-decoration: none;
@@ -97,6 +128,10 @@ body.left-arrow {
   position: absolute;
   right: 0;
   bottom: 4px;
+}
+
+.copy-header-read-more::after {
+  display: none;
 }
 
 .city-label {

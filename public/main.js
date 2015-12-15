@@ -183,10 +183,10 @@ function brushed() {
 
 function renderStory() {
   var story = STORIES[sliderPos];
-  d3.select('.map-story h2').text(story.label);
-  d3.select('.map-story p').text(story.copy);
-  d3.select('.map-story2 h2').text(story.labeltwo);
-  d3.select('.map-story2 p').text(story.copytwo);
+  d3.select('.map-story h2').html(story.label);
+  d3.select('.map-story p').html(story.copy);
+  d3.select('.map-story2 h2').html(story.labeltwo);
+  d3.select('.map-story2 p').html(story.copytwo);
 }
 
 function updateCityValues() {
