@@ -150,7 +150,7 @@ function highlightCurrentCity(stories) {
   d3.selectAll("circle")
     .style("fill", "white")
     .style("opacity", 0.5);
-  d3.select("[id='" + story.label + "']")
+  d3.select("[id='" + story.label.replace('São Paulo', 'Sao Paulo') + "']")
     .style("fill", "none")
     .style("stroke", "white")
     .style("stroke-width", 4)
