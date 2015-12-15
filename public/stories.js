@@ -5,7 +5,9 @@ var STORIES = {
   },
   "February 2015": {
     label: 'Los Angeles',
-    copy: 'L.A.’s recent mass-influx of artists has perhaps drawn the most fervent art-world attention in recent years—major international galleries have flooded in as well. And, in September, the city’s biggest artistic benefactors, Eli and Edythe Broad, opened The Broad, a $140 million new home for their collection, to critical acclaim.'
+    copy: 'L.A.’s recent mass-influx of artists has perhaps drawn the most fervent art-world attention in recent years—major international galleries have flooded in as well. And, in September, the city’s biggest artistic benefactors, Eli and Edythe Broad, opened The Broad, a $140 million new home for their collection, to critical acclaim.',
+    labeltwo: 'New York',
+    copytwo: 'L.A.’s recent mass-influx of artists has perhaps drawn the most fervent art-world attention in recent years—major international galleries have flooded in as well. And, in September, the city’s biggest artistic benefactors, Eli and Edythe Broad, opened The Broad, a $140 million new home for their collection, to critical acclaim.'
   },
   "March 2015": {
     label: 'New York',
