@@ -19,6 +19,7 @@ var domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04')
   new Date('2016-01')];
 var SLIDER_DURATION = 400;
 var IS_CHROME = navigator.userAgent.match('Chrome');
+var IS_FIREFOX = navigator.userAgent.match('Firefox');
 
 drawWorld();
 

@@ -21,6 +21,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body[data-useragent*='Firefox'] .map svg {
+  width: 1200px;
+}
+
+body[data-useragent*='Firefox'] .map-story {
+  margin-left: 50px;
+}
+
+body[data-useragent*='Firefox'] .map-story2 {
+  margin-right: -50px;
+}
+
+body[data-useragent*='Firefox'] .map {
+  margin-left: -100px;
+}
+
 body.right-arrow {
   cursor: url("chevron-left.png") -24 20, auto;
 }
