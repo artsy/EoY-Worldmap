@@ -26,7 +26,7 @@ var STORIES = {
     copy: 'The art world touched down in Venice once again this May for the <a href="https://www.artsy.net/56th-venice-biennale">56th Biennale</a>, with its central exhibition, “<a href="https://www.artsy.net/article/artsy-editorial-okwui-enwezor-venice-biennale-all-the-worlds-futures">All the World’s Futures</a>,” headed up this time by Haus der Kunst director Okwui Enwezor. For the past 120 years, the biennale has been <a href="https://www.artsy.net/article/artsy-editorial-behind-the-venice-biennale-2015-a-short-history-of-the-world-s-most-important-art-exhibition">a touchstone for artistic progress</a>, and this year was no different.'
   },
   "June 2015": {
-    label: 'Basel + Zürich',
+    label: 'Zürich + Basel',
     copy: 'Each June, the art world stops off in Zürich for its annual gallery weekend ahead of the art market megalith that is Art Basel in Basel. The fair’s location on the borders of Switzerland, France, and Germany place it in the midst of many of Europe’s most fervent collectors.'
   },
   "July 2015": {

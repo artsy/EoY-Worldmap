@@ -1,5 +1,6 @@
 var sliderPos = 'December 2014';
 var sliderPositions = [
+  "December 2014",
   "January 2015",
   "February 2015",
   "March 2015",
@@ -10,8 +11,7 @@ var sliderPositions = [
   "August 2015",
   "September 2015",
   "October 2015",
-  "November 2015",
-  "December 2015"
+  "November 2015"
 ];
 var domainArray = [new Date('2015-01'), new Date('2015-02'), new Date('2015-03'), new Date('2015-04'),
   new Date('2015-05'), new Date('2015-06'), new Date('2015-07'), new Date('2015-08'),
@@ -156,7 +156,7 @@ function highlightCurrentCity(stories) {
     .style("opacity", 0.5);
   if (story.label == 'São Paulo') {
     var selector = "[id='Sao Paulo']";
-  } else if (story.label == 'Basel + Zürich') {
+  } else if (story.label == 'Zürich + Basel') {
     var selector = "[id='Basel'], [id='Zurich']";
   } else if (story.label == 'New York City') {
     var selector = "[id='New York']";
