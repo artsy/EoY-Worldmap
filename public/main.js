@@ -18,6 +18,7 @@ var domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04')
   new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12'),
   new Date('2016-01')];
 var SLIDER_DURATION = 400;
+var IS_CHROME = navigator.userAgent.match('Chrome');
 
 drawWorld();
 
@@ -48,7 +49,8 @@ function drawWorld() {
     toggleArrows();
     renderStory();
     setTimeout(highlightCurrentCity, 100);
-  })
+  });
+  $('body').attr('data-useragent', navigator.userAgent);
 }
 
 function toggleArrows() {
@@ -99,9 +101,10 @@ function drawSlider() {
     .on("brush", brushed)
     .on("brushend", highlightCurrentCity);
 
+
   var svg = d3.select("svg")
     .append("g")
-    .attr("transform", "translate(" + 0 + "," + 570 + ")");
+    .attr("transform", "translate(" + (IS_CHROME ? 0 : 50) + "," + 570 + ")");
 
   svg.append("g")
     .attr("class", "axis")
@@ -161,7 +164,6 @@ function highlightCurrentCity(stories) {
   } else {
     var selector = "[id='" + story.label + "']";
   }
-  console.log(selector)
   var css = {
     fill: "none",
     stroke: "white",
