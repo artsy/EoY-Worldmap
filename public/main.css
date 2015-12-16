@@ -76,10 +76,11 @@ i {
 .container {
   text-align: center;
   position: absolute;
-  height: 100%;
+  height: 1400px;
   width: 100%;
   top: 20px;
   left: 0;
+  overflow: hidden;
 }
 
 .map {

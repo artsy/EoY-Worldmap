@@ -179,6 +179,7 @@ function brushed() {
   // Run "on date change" callbacks
   renderStory();
   updateCityValues();
+  d3.select('.mobile-year').html(sliderPos.replace('2015', ''))
 }
 
 function renderStory() {
