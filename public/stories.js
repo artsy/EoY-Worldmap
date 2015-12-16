@@ -1,4 +1,8 @@
 var STORIES = {
+  "December 2014": {
+    label: 'Miami + Miami Beach',
+    copy: 'Each December, an avalanche of attention hits South Beach thanks to <a href="https://www.artsy.net/art-basel-in-miami-beach-2015">Art Basel in Miami Beach</a>. The city serves as the art market’s gateway to Latin and South America, and numerous satellite fairs and fêtes have joined the 14-year-old main event to mark a tropical send-off to the art-world calendar.'
+  },
   "January 2015": {
     label: 'Singapore',
     copy: 'It’s hardly surprising that a city with such economic might as Singapore would attract a hefty art scene. Major investments have been made in the country’s cultural infrastructure in recent years, including the opening this November of the National Gallery Singapore, the city-state’s first major art museum.'
@@ -48,9 +52,5 @@ var STORIES = {
   "November 2015": {
     label: 'New York City',
     copy: 'It’s hard to find an art-related stat in which New York City fails to come out on top. The city is home to more galleries than any other. It has more major art institutions than any other. And its marketplace is bigger than any other—by a large measure.'
-  },
-  "December 2015": {
-    label: 'Miami + Miami Beach',
-    copy: 'Each December, an avalanche of attention hits South Beach thanks to <a href="https://www.artsy.net/art-basel-in-miami-beach-2015">Art Basel in Miami Beach</a>. The city serves as the art market’s gateway to Latin and South America, and numerous satellite fairs and fêtes have joined the 14-year-old main event to mark a tropical send-off to the art-world calendar.'
-  },
+  }
 };
