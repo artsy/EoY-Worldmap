@@ -1,4 +1,4 @@
-var sliderPos = 'January 2015';
+var sliderPos = 'December 2014';
 var sliderPositions = [
   "January 2015",
   "February 2015",
@@ -13,10 +13,9 @@ var sliderPositions = [
   "November 2015",
   "December 2015"
 ];
-var domainArray = [new Date('2015-02'), new Date('2015-03'), new Date('2015-04'),
+var domainArray = [new Date('2015-01'), new Date('2015-02'), new Date('2015-03'), new Date('2015-04'),
   new Date('2015-05'), new Date('2015-06'), new Date('2015-07'), new Date('2015-08'),
-  new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12'),
-  new Date('2016-01')];
+  new Date('2015-09'), new Date('2015-10'), new Date('2015-11'), new Date('2015-12')];
 var SLIDER_DURATION = 400;
 var IS_CHROME = navigator.userAgent.match('Chrome');
 var IS_FIREFOX = navigator.userAgent.match('Firefox');
@@ -93,7 +92,7 @@ function drawSlider() {
     .clamp(true);
 
   // initial value
-  startingValue = new Date('2015-02');
+  startingValue = new Date('2015-01');
 
   // defines brush
   brush = d3.svg.brush()
@@ -153,6 +152,7 @@ function highlightCurrentCity(stories) {
   var story = STORIES[sliderPos];
   d3.selectAll("circle")
     .style("fill", "white")
+    .style("stroke", "white")
     .style("opacity", 0.5);
   if (story.label == 'São Paulo') {
     var selector = "[id='Sao Paulo']";
@@ -166,11 +166,12 @@ function highlightCurrentCity(stories) {
     var selector = "[id='" + story.label + "']";
   }
   var css = {
-    fill: "none",
-    stroke: "white",
+    fill: "transparent",
+    stroke: "#a500ff",
     opacity: 1
   }
   css['stroke-width'] = 4;
+  css['z-index'] = 20;
   $(selector).css(css);
   $("[id='" + story.labeltwo + "']").css(css);
 }
@@ -180,19 +181,22 @@ function brushed() {
   var value = brush.extent()[0];
 
   if (d3.event.sourceEvent) {
-    value = timeScale.invert(d3.mouse(this)[0]);
+    var mouseX = d3.mouse(this)[0];
+    if (IS_FIREFOX) mouseX -= 50;
+    value = timeScale.invert(mouseX);
     brush.extent([formatDate(value), formatDate(value)]);
   }
 
-  handle.attr("transform", "translate(" + timeScale(value) + ",0)");
-  handle.select('text').text(formatDate(value).replace('2015', ''));
+  var x = Number(timeScale(value));
+  handle.attr("transform", "translate(" + x + ",0)");
+  handle.select('text').text(formatDate(value).replace('2015', '').replace('2014', ''));
   oldSliderPos = sliderPos;
   sliderPos = formatDate(value);
 
   // Run "on date change" callbacks
   renderStory();
   updateCityValues();
-  d3.select('.mobile-year').html(sliderPos.replace('2015', ''))
+  d3.select('.mobile-year').html(sliderPos.replace('2015', '').replace('2014', ''))
 }
 
 function renderStory() {
@@ -205,6 +209,7 @@ function renderStory() {
 
 function updateCityValues() {
   var sliderPositionHash = {
+    "December 2014": "dec",
     "January 2015": "jan",
     "February 2015": "feb",
     "March 2015": "mar",
@@ -215,8 +220,7 @@ function updateCityValues() {
     "August 2015": "aug",
     "September 2015": "sep",
     "October 2015": "oct",
-    "November 2015": "nov",
-    "December 2015": "dec"
+    "November 2015": "nov"
   };
   if (oldSliderPos != sliderPos) {
     //add: display default month by making hash for sliderPos:default city, then pass to show function
