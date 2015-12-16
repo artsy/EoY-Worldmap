@@ -150,16 +150,26 @@ function highlightCurrentCity(stories) {
   d3.selectAll("circle")
     .style("fill", "white")
     .style("opacity", 0.5);
-  d3.select("[id='" + story.label.replace('São Paulo', 'Sao Paulo') + "']")
-    .style("fill", "none")
-    .style("stroke", "white")
-    .style("stroke-width", 4)
-    .style("opacity", 1);
-  d3.select("[id='" + story.labeltwo + "']")
-    .style("fill", "none")
-    .style("stroke", "white")
-    .style("stroke-width", 4)
-    .style("opacity", 1);
+  if (story.label == 'São Paulo') {
+    var selector = "[id='Sao Paulo']";
+  } else if (story.label == 'Basel + Zürich') {
+    var selector = "[id='Basel'], [id='Zurich']";
+  } else if (story.label == 'New York City') {
+    var selector = "[id='New York']";
+  } else if (story.label == 'Miami + Miami Beach') {
+    var selector = "[id='Miami Beach'],[id='Miami']";
+  } else {
+    var selector = "[id='" + story.label + "']";
+  }
+  console.log(selector)
+  var css = {
+    fill: "none",
+    stroke: "white",
+    opacity: 1
+  }
+  css['stroke-width'] = 4;
+  $(selector).css(css);
+  $("[id='" + story.labeltwo + "']").css(css);
 }
 
 // slider event handler

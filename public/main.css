@@ -155,13 +155,13 @@ i {
 }
 
 .map-story {
-  left: 50px;
+  left: 48px;
   padding-right: 15px;
 }
 
 .map-story2 {
   padding-left: 15px;
-  right: 50px;
+  right: 48px;
 }
 
 .map-story h2, .map-story2 h2 {
@@ -209,6 +209,9 @@ i {
   .map-story, .map-story2 {
     bottom: 200px;
   }
+  .map-story {
+    left: 42px;
+  }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -226,6 +229,9 @@ i {
   }
   .map-story, .map-story2 {
     bottom: 350px;
+  }
+  .map-story {
+    left: 32px;
   }
 }
 
