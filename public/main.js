@@ -161,7 +161,7 @@ function highlightCurrentCity(stories) {
   } else if (story.label == 'New York City') {
     var selector = "[id='New York']";
   } else if (story.label == 'Miami + Miami Beach') {
-    var selector = "[id='Miami Beach'],[id='Miami']";
+    var selector = "[id='Miami + Miami Beach']";
   } else {
     var selector = "[id='" + story.label + "']";
   }
@@ -261,7 +261,7 @@ function stepLeft() {
 }
 
 function drawData() {
-  var defaultStartMonth = 'jan';
+  var defaultStartMonth = 'dec';
   d3.csv("master_data.csv", function(cities) {
     map_svg.selectAll("circle")
       .data(cities)
