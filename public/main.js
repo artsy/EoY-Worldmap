@@ -240,7 +240,6 @@ function updateCityValues() {
 function stepRight() {
   var nextDate = domainArray[sliderPositions.indexOf(sliderPos) + 1];
   if (!nextDate) return;
-  console.log('moo', nextDate)
   slider
     .transition()
     .duration(SLIDER_DURATION)
